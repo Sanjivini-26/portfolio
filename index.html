@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Sanjivini Antil — Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@600;700&family=Cinzel:wght@400;600&display=swap" rel="stylesheet"/>
+    <style>
+      *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+      :root {
+        --bg1:#1a1a2e; --bg2:#16213e; --bg3:#0f3460;
+        --red:#ff6b6b; --orange:#ff8e53; --text:#e0e0e0; --muted:#8892b0;
+      }
+      html, body { width:100%; height:100%; background:#000000; font-family:'Inter',sans-serif; }
+
+      #intro {
+        position:fixed; inset:0; z-index:9999;
+        display:flex; flex-direction:column; align-items:center; justify-content:center;
+        background:linear-gradient(135deg,#000000 0%,#0a0602 60%,#050300 100%);
+      }
+      #particles { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+      #intro::after {
+        content:''; position:absolute; inset:0;
+        background:radial-gradient(ellipse 65% 65% at 50% 50%,transparent 25%,rgba(10,10,30,.75) 100%);
+        pointer-events:none; z-index:1;
+      }
+      #logo-wrap {
+        position:relative; z-index:10;
+        display:flex; flex-direction:column; align-items:center;
+        opacity:0; animation:wrapIn 1.8s cubic-bezier(.16,1,.3,1) 1.4s forwards;
+      }
+      @keyframes wrapIn {
+        from{opacity:0;transform:scale(.88) translateY(14px);}
+        to{opacity:1;transform:scale(1) translateY(0);}
+      }
+      #monogram-wrap { position:relative; width:280px; height:240px; }
+      #mono-svg { width:100%; height:100%; }
+      .ltr-outline { fill:none; stroke:url(#accentStroke); stroke-width:1; opacity:0; animation:outIn .7s ease 2.2s forwards; }
+      @keyframes outIn { to{opacity:.6;} }
+      .ltr-fill { fill:url(#accentFill); opacity:0; animation:fillIn 1s ease 2.8s forwards; }
+      @keyframes fillIn { to{opacity:1;} }
+      .ltr-shimmer { fill:url(#shimmerGrad); opacity:0; mix-blend-mode:screen; animation:shimmerIn .6s ease 3.4s forwards,shimmerLoop 3s ease-in-out 4s infinite; }
+      @keyframes shimmerIn{to{opacity:.5;}} @keyframes shimmerLoop{0%,100%{opacity:.25;}50%{opacity:.6;}}
+      #swoosh-path {
+        fill:none; stroke:url(#swooshG); stroke-width:2.2; stroke-linecap:round;
+        stroke-dasharray:320; stroke-dashoffset:320;
+        filter:drop-shadow(0 0 6px var(--red));
+        animation:drawSwoosh .9s cubic-bezier(.4,0,.2,1) 3.5s forwards;
+      }
+      @keyframes drawSwoosh{to{stroke-dashoffset:0;}}
+      #tagline-wrap { margin-top:10px; display:flex; flex-direction:column; align-items:center; gap:8px; }
+      #divider { width:0; height:1px; background:linear-gradient(90deg,transparent,var(--red),var(--orange),transparent); animation:divExpand .8s ease 3.8s forwards; }
+      @keyframes divExpand{to{width:220px;}}
+      #fullname {
+        font-family:'Cinzel',serif; font-size:1rem; font-weight:400;
+        letter-spacing:.55em; text-transform:uppercase; color:var(--text); opacity:0;
+        text-shadow:0 0 20px rgba(255,107,107,.5),0 0 40px rgba(255,142,83,.2);
+        animation:nameIn 1s ease 4s forwards;
+      }
+      @keyframes nameIn{from{opacity:0;letter-spacing:.8em;}to{opacity:1;letter-spacing:.55em;}}
+      #subtitle { font-family:'Inter',sans-serif; font-size:.7rem; letter-spacing:.3em; text-transform:uppercase; color:var(--muted); opacity:0; animation:subIn .8s ease 4.5s forwards; }
+      @keyframes subIn{to{opacity:1;}}
+      .flare { position:absolute; border-radius:50%; pointer-events:none; opacity:0; }
+      #fl1 { width:10px;height:10px;background:radial-gradient(circle,#fff 0%,var(--red) 40%,transparent 70%);box-shadow:0 0 16px 6px var(--red),0 0 40px 14px rgba(255,107,107,.3);top:42%;left:55%;animation:flareAnim .5s ease 3.52s forwards; }
+      #fl2 { width:4px;height:4px;background:#fff;box-shadow:0 0 8px 3px rgba(255,142,83,.8);top:28%;left:72%;animation:flareAnim .3s ease 3.65s forwards; }
+      #fl3 { width:3px;height:3px;background:#fff;box-shadow:0 0 6px 2px rgba(255,107,107,.7);top:60%;left:30%;animation:flareAnim .3s ease 3.7s forwards; }
+      @keyframes flareAnim{0%{opacity:0;transform:scale(0);}50%{opacity:1;transform:scale(2);}100%{opacity:.5;transform:scale(1);}}
+      #root { opacity:0; visibility:hidden; transition: opacity 0.8s ease; }
+      #root.visible { opacity:1; visibility:visible; }
+      #intro.out { animation:introOut 1.4s cubic-bezier(.4,0,1,1) forwards; }
+      @keyframes introOut{to{opacity:0;pointer-events:none;}}
+    </style>
+  </head>
+  <body>
+
+    <!-- Intro animation -->
+    <div id="intro">
+      <canvas id="particles"></canvas>
+      <div id="logo-wrap">
+        <div id="monogram-wrap">
+          <svg id="mono-svg" viewBox="0 0 260 220" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="accentFill" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ff6b6b"/><stop offset="50%" stop-color="#ff8e53"/><stop offset="100%" stop-color="#ff6b6b"/>
+              </linearGradient>
+              <linearGradient id="accentStroke" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ff8e53"/><stop offset="100%" stop-color="#ff6b6b"/>
+              </linearGradient>
+              <linearGradient id="shimmerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="transparent"/>
+                <stop offset="45%" stop-color="#fff" stop-opacity="0"/>
+                <stop offset="55%" stop-color="#fff" stop-opacity=".85"/>
+                <stop offset="100%" stop-color="transparent"/>
+                <animateTransform attributeName="gradientTransform" type="translate" values="-2 0;2 0;-2 0" dur="2.5s" repeatCount="indefinite"/>
+              </linearGradient>
+              <linearGradient id="swooshG" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#ff6b6b" stop-opacity="0"/>
+                <stop offset="35%" stop-color="#ff6b6b"/>
+                <stop offset="70%" stop-color="#ff8e53"/>
+                <stop offset="100%" stop-color="#ff8e53" stop-opacity="0"/>
+              </linearGradient>
+              <filter id="glow" x="-25%" y="-25%" width="150%" height="150%">
+                <feGaussianBlur stdDeviation="4" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+              <filter id="softglow" x="-15%" y="-15%" width="130%" height="130%">
+                <feGaussianBlur stdDeviation="2.5" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <text x="10" y="185" font-family="'Cinzel','Poppins',sans-serif" font-size="190" font-weight="700" class="ltr-outline" filter="url(#glow)">S</text>
+            <text x="108" y="185" font-family="'Cinzel','Poppins',sans-serif" font-size="190" font-weight="700" class="ltr-outline" filter="url(#glow)">A</text>
+            <text x="10" y="185" font-family="'Cinzel','Poppins',sans-serif" font-size="190" font-weight="700" class="ltr-fill" filter="url(#softglow)">S</text>
+            <text x="108" y="185" font-family="'Cinzel','Poppins',sans-serif" font-size="190" font-weight="700" class="ltr-fill" filter="url(#softglow)">A</text>
+            <text x="10" y="185" font-family="'Cinzel','Poppins',sans-serif" font-size="190" font-weight="700" class="ltr-shimmer">S</text>
+            <text x="108" y="185" font-family="'Cinzel','Poppins',sans-serif" font-size="190" font-weight="700" class="ltr-shimmer">A</text>
+            <path id="swoosh-path" d="M 5 158 C 50 100 100 135 130 115 C 160 95 200 60 255 72"/>
+          </svg>
+          <div class="flare" id="fl1"></div>
+          <div class="flare" id="fl2"></div>
+          <div class="flare" id="fl3"></div>
+        </div>
+        <div id="tagline-wrap">
+          <div id="divider"></div>
+          <div id="fullname">Sanjivini Antil</div>
+          <div id="subtitle">Designer &nbsp;&amp;&nbsp; Developer</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- React app -->
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+
+    <script>
+      const cvs = document.getElementById('particles');
+      const ctx = cvs.getContext('2d');
+      function resize(){cvs.width=innerWidth;cvs.height=innerHeight;}
+      resize(); window.addEventListener('resize',resize);
+      const rnd=(a,b)=>a+Math.random()*(b-a);
+      const CX=()=>cvs.width/2, CY=()=>cvs.height/2;
+      const COLORS=[
+        ()=>`hsla(${rnd(0,20)},100%,${rnd(60,75)}%,1)`,
+        ()=>`hsla(${rnd(20,35)},100%,${rnd(60,72)}%,1)`,
+        ()=>`rgba(${rnd(180,220)},${rnd(140,180)},255,1)`,
+      ];
+      class Particle{
+        constructor(init){this.init=init;this.reset();}
+        reset(){const a=rnd(0,Math.PI*2),r=this.init?rnd(0,300):rnd(5,50);this.x=CX()+Math.cos(a)*r;this.y=CY()+Math.sin(a)*r;this.vx=rnd(-.3,.3);this.vy=rnd(-1,-.2);this.sz=rnd(.5,2.2);this.life=0;this.max=rnd(100,230);this.colorFn=COLORS[Math.floor(Math.random()*COLORS.length)];this.init=false;}
+        tick(){this.x+=this.vx;this.y+=this.vy;this.life++;if(this.life>this.max)this.reset();}
+        draw(){const t=this.life/this.max,a=t<.2?t/.2:t>.75?(1-t)/.25:1;ctx.globalAlpha=a*.85;ctx.fillStyle=this.colorFn();ctx.beginPath();ctx.arc(this.x,this.y,this.sz,0,Math.PI*2);ctx.fill();}
+      }
+      class Smoke{
+        constructor(init){this.init=init;this.reset();}
+        reset(){const a=rnd(0,Math.PI*2),r=this.init?rnd(0,200):rnd(0,80);this.x=CX()+Math.cos(a)*r;this.y=CY()+Math.sin(a)*r;this.vx=rnd(-.1,.1);this.vy=rnd(-.4,-.07);this.r=rnd(30,75);this.life=0;this.max=rnd(140,290);this.init=false;}
+        tick(){this.x+=this.vx;this.y+=this.vy;this.r+=.18;this.life++;if(this.life>this.max)this.reset();}
+        draw(){const t=this.life/this.max,a=(t<.3?t/.3:1-(t-.3)/.7)*.05;const g=ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.r);g.addColorStop(0,`rgba(255,107,107,${a})`);g.addColorStop(.5,`rgba(15,52,96,${a*.6})`);g.addColorStop(1,'rgba(0,0,0,0)');ctx.globalAlpha=1;ctx.fillStyle=g;ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fill();}
+      }
+      const parts=Array.from({length:160},(_,i)=>new Particle(i<90));
+      const smokes=Array.from({length:20},(_,i)=>new Smoke(i<10));
+      let gp=0;
+      function ambientGlow(){gp+=.015;const pulse=.5+.5*Math.sin(gp),r=240+pulse*60;const g=ctx.createRadialGradient(CX(),CY(),0,CX(),CY(),r);g.addColorStop(0,`rgba(255,107,107,${.08+pulse*.06})`);g.addColorStop(.35,`rgba(255,142,83,${.04+pulse*.03})`);g.addColorStop(.7,'rgba(15,52,96,.06)');g.addColorStop(1,'rgba(0,0,0,0)');ctx.globalAlpha=1;ctx.fillStyle=g;ctx.beginPath();ctx.arc(CX(),CY(),r,0,Math.PI*2);ctx.fill();}
+      function loop(){ctx.clearRect(0,0,cvs.width,cvs.height);ambientGlow();smokes.forEach(s=>{s.tick();s.draw();});parts.forEach(p=>{p.tick();p.draw();});ctx.globalAlpha=1;requestAnimationFrame(loop);}
+      loop();
+      setTimeout(()=>{
+        document.getElementById('intro').classList.add('out');
+        setTimeout(()=>{
+          document.getElementById('intro').style.display='none';
+          document.getElementById('root').classList.add('visible');
+        }, 1400);
+      }, 6000);
+    </script>
+  </body>
+</html>
